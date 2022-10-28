@@ -4,7 +4,7 @@
 
 ## Getting started
 * First of all, you'll need to install the PlatformIO Core (CLI) :ant:
-* On a terminal you can simply type `Pip install platformio` to get the client globally installed
+* On a terminal you can simply type `pip install platformio` to get the client globally installed
 * Now you are able to use the `pio` command. For more information, type `pio -h` 
 ### Working on a existent project
 * Navigate to the project's folder you want to work on and find the *src* folder inside of it
