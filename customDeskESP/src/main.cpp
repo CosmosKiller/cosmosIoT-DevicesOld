@@ -1,22 +1,22 @@
-#include <Arduino.h>
-#include <PubSubClient.h>
-#include <ESP8266WiFi.h>
-#include <MqttCustomFunc.h>
-#include <CosmosIOT.h>
+#include "PubSubClient.h"
+#include "ESP8266WiFi.h"
+
+#include "MqttCustomFunc.h"
+#include "CosmosIOT.h"
 #include "secretSerial.h"
 
 //Defining and initiating our devices
-Devices devices []{
-{"SKTMg-aaa0000", {37, 0, 0}, HIGH},
-{"SKTMg-aaa0001", {35, 0, 0}, HIGH},
-{"SKTMg-aaa0002", {33, 0, 0}, HIGH},
-{"SKTMg-aaa0003", {31, 0, 0}, HIGH},
-{"SKTMg-aaa0004", {29, 0, 0}, HIGH},
-{"SKTMg-aaa0005", {27, 0, 0}, HIGH},
-{"SKTMg-aaa0006", {25, 0, 0}, HIGH},
-{"SKTMg-aaa0007", {23, 0, 0}, HIGH},
-{"LSCSc-aaa0000", {4, 3, 2}, LOW},
-{"SNRTh-aaa0000", {39, 0, 0}, HIGH}
+Devices_t devices []{
+  {"SKTMg-aaa0000", {37, 0, 0}, HIGH},
+  {"SKTMg-aaa0001", {35, 0, 0}, HIGH},
+  {"SKTMg-aaa0002", {33, 0, 0}, HIGH},
+  {"SKTMg-aaa0003", {31, 0, 0}, HIGH},
+  {"SKTMg-aaa0004", {29, 0, 0}, HIGH},
+  {"SKTMg-aaa0005", {27, 0, 0}, HIGH},
+  {"SKTMg-aaa0006", {25, 0, 0}, HIGH},
+  {"SKTMg-aaa0007", {23, 0, 0}, HIGH},
+  {"LSCSc-aaa0000", {4, 3, 2}, LOW},
+  {"SNRTh-aaa0000", {39, 0, 0}, HIGH}
 };
 
 const int QUANTITY = sizeof(devices)/sizeof(devices[0]);
@@ -36,7 +36,7 @@ PubSubClient client(espClient);
 
 //Variables
 String incomingStr = "";
-Payload splitPayload;
+Payload_t splitPayload;
 
 //Function declaration
 void setup_wifi();

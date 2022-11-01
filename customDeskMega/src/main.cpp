@@ -1,27 +1,27 @@
-#include <Arduino.h>
-#include <DHT.h>
-#include <MqttCustomFunc.h>
-#include <CosmosIOT.h>
+/**
+* The source code used to manage all the I/O functionalities, reciving 
+* the commands from the ESP8266 via the serial pins (TX0/RX0)
+* It can also be used to return information such as temperature, humidity and
+* polution messurements
+*/ 
 
-/*
-The source code used to manage all the I/O functionalities, reciving 
-the commands from the ESP8266 via the serial pins (TX0/RX0)
-It can also be used to return information such as temperature, humidity and
-polution messurements
-*/
+#include "DHT.h"
+
+#include "MqttCustomFunc.h"
+#include "CosmosIOT.h"
 
 //Defining and initiating our devices
-Devices devices []{
-{"SKTMg-aaa0000", {37, 0, 0}, HIGH},
-{"SKTMg-aaa0001", {35, 0, 0}, HIGH},
-{"SKTMg-aaa0002", {33, 0, 0}, HIGH},
-{"SKTMg-aaa0003", {31, 0, 0}, HIGH},
-{"SKTMg-aaa0004", {29, 0, 0}, HIGH},
-{"SKTMg-aaa0005", {27, 0, 0}, HIGH},
-{"SKTMg-aaa0006", {25, 0, 0}, HIGH},
-{"SKTMg-aaa0007", {23, 0, 0}, HIGH},
-{"LSCSc-aaa0000", {4, 3, 2}, LOW},
-{"SNRTh-aaa0000", {39, 0, 0}, HIGH}
+Devices_t devices []{
+  {"SKTMg-aaa0000", {37, 0, 0}, HIGH},
+  {"SKTMg-aaa0001", {35, 0, 0}, HIGH},
+  {"SKTMg-aaa0002", {33, 0, 0}, HIGH},
+  {"SKTMg-aaa0003", {31, 0, 0}, HIGH},
+  {"SKTMg-aaa0004", {29, 0, 0}, HIGH},
+  {"SKTMg-aaa0005", {27, 0, 0}, HIGH},
+  {"SKTMg-aaa0006", {25, 0, 0}, HIGH},
+  {"SKTMg-aaa0007", {23, 0, 0}, HIGH},
+  {"LSCSc-aaa0000", {4, 3, 2}, LOW},
+  {"SNRTh-aaa0000", {39, 0, 0}, HIGH}
 };
 
 const int QUANTITY = sizeof(devices)/sizeof(devices[0]);
@@ -36,9 +36,9 @@ DHT dht(DHTPIN, DHTTYPE);
 int btnArr[] = {22, 24, 26, 28, 30, 32, 34, 36};
 int btnArrLen = sizeof(btnArr)/sizeof(btnArr[0]);
 
-/*
-Defining the array that we'll use to
-asign a btn to a certain device.
+/**
+* Defining the array that we'll use to
+* asign a btn to a certain device.
 */
 String btnToDev[] = {
   devices[0].sn,
@@ -57,7 +57,7 @@ float humudity, temperature;
 bool valueComplete = false;
 char toSend[50] = "";
 String incomingStr = "";
-Payload splitPayload;
+Payload_t splitPayload;
 
 
 void setup()
