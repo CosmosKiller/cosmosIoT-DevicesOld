@@ -7,7 +7,6 @@
 
 #include "DHT.h"
 
-#include "MqttCustomFunc.h"
 #include "CosmosIOT.h"
 
 //Defining and initiating our devices

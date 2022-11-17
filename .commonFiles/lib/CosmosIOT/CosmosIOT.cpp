@@ -96,6 +96,9 @@ String socketControll(String snValue, int qty, Devices_t dev[])
       }
     }
   }
+
+  msg = devState + "|" + snValue + "/rx_state";
+  return msg;
 }
 
 String lightControll(String snValue, String rgbValues, int qty, Devices_t dev[])
