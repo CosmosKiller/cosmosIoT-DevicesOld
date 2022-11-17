@@ -1,7 +1,5 @@
-#include "PubSubClient.h"
 #include "ESP8266WiFi.h"
 
-#include "MqttCustomFunc.h"
 #include "CosmosIOT.h"
 #include "secretSerial.h"
 
@@ -25,23 +23,12 @@ const int QUANTITY = sizeof(devices)/sizeof(devices[0]);
 const char* ssid = SECRET_SSID;
 const char* pass = SECRET_PASS;
 
-//MQTT Credentials
-const char* mqtt_server = SECRET_MQTT_HOST;
-const int mqtt_port = SECRET_MQTT_PORT;
-const char* mqtt_user = SECRET_MQTT_USER;
-const char* mqtt_pass = SECRET_MQTT_PASS;
-
-WiFiClient espClient;
-PubSubClient client(espClient);
-
 //Variables
 String incomingStr = "";
 Payload_t splitPayload;
 
 //Function declaration
 void setup_wifi();
-void mqtt_reconect();
-void response();
 
 void setup()
 {
@@ -51,18 +38,12 @@ void setup()
   randomSeed(micros());
   setup_wifi();
 
-  //mqtt client setup
-  client.setServer(mqtt_server, mqtt_port);
-  client.setCallback(payloadSerialSend);
+  cosmosMqttSetup(payloadSerialSend);
 }
 
 void loop()
 {
-  if (!client.connected())
-  {
-    mqtt_reconect();
-  }
-  client.loop();
+  cosmosMqttLoop(QUANTITY, devices);
 }
 
 
@@ -80,38 +61,6 @@ void setup_wifi()
   }
 }
 
-void mqtt_reconect()
-{
-  while (!client.connected())
-  {
-    //Client creation
-    String clientId = "esp_";
-    clientId += String(random(0xffff), HEX);
-    //Coneccting the client
-    if (client.connect(clientId.c_str(), mqtt_user, mqtt_pass))
-    {
-      //Dinamic subscription based on the device types
-      int aux = 0;
-    
-      for (int j = 0; j < QUANTITY; j++)
-      {
-        char auxTopic[30] ="";
-
-        String topic = topicGeneration(devices[j].sn, aux);
-      	topic.toCharArray(auxTopic, 30);
-   		  if (topic.length() > 14)
-          client.subscribe(auxTopic);
-      
-        aux += 14;
-      }
-    }
-    else
-    {
-      delay(5000);
-    }
-  }
-}
-
 void serialEvent()
 {
   String auxTopic = "";
@@ -122,12 +71,12 @@ void serialEvent()
   {
     incomingStr = Serial.readString();
     incomingStr = incomingStr + "/";
-    splitPayload = payloadSplit(incomingStr);
+    splitPayload = payloadSerialSplit(incomingStr);
 
     auxTopic = splitPayload.sn + '/' + splitPayload.category;
     auxTopic.toCharArray(topic, 50);
     splitPayload.msg.toCharArray(msg, 50);
 
-    client.publish(topic, msg);
+    cosmosMqttPublish(topic, msg);
   }
 }

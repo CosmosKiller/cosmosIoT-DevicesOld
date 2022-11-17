@@ -112,6 +112,6 @@ void serialEvent1()
   {
     incomingStr = Serial1.readString();
     incomingStr = incomingStr + "/";
-    splitPayload = payloadSplit(incomingStr);
+    splitPayload = payloadSerialSplit(incomingStr);
   }
 }

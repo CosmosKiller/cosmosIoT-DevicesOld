@@ -16,14 +16,13 @@ typedef struct MqttCustomFunc
 *
 * @param serialNumber Use the member sn of the "Devices" struct in order to pass the
 * serial number as a paramter
-* @param aux A simple counter, use 0 as default value when declaring it
 * @return Notice that 'topic' is returned as an String, you need to 
 * cast it to a char array
 */
-String topicGeneration(String serialNumber, int aux);
+String topicGeneration(String serialNumber);
 
 /**
-* This function is the meant to use it within the callback()
+* This function is meant to be used it within the callback()
 * that we'll define and use in the setCallback() method.
 *
 * @param payload Message sent by the mqtt broker
@@ -35,12 +34,14 @@ String topicGeneration(String serialNumber, int aux);
 String payloadCapture(byte* payload, unsigned int length);
 
 /**
-* Use this function as the parameter for setCallback()
-* method is you are sending the messagerecived from
+* Use this function as the parameter for cosmosMqttSetup()
+* method if you are sending the message recived from
 * the broker, to another MCU via serial pins.
 * Last two parameters are the same for payloadCapture()
 *
 * @param topic Topic in which the mqtt broker publishes the message
+* @param payload Message sent by the mqtt broker
+* @param length The length of the payload
 */
 void payloadSerialSend(char* topic, byte* payload, unsigned int length);
 
@@ -52,6 +53,6 @@ void payloadSerialSend(char* topic, byte* payload, unsigned int length);
 * @return Struct that contains three different Strings (sn, msg, category)
 * which we'll use in our code depending on the project needs
 */
-Payload_t payloadSplit(String incomingPayload);
+Payload_t payloadSerialSplit(String incomingPayload);
 
 #endif /* MAIN_MQTTCUSTOMFUNC_H_ */

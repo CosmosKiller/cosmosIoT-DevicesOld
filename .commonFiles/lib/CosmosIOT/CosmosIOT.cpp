@@ -1,6 +1,55 @@
 #include <stdio.h>
 
+#include "PubSubClient.h"
+#include "WiFiClient.h"
+
 #include "CosmosIOT.h"
+#include "secretSerial.h"
+
+//MQTT Credentials
+const char* mqtt_server = SECRET_MQTT_HOST;
+const int mqtt_port = SECRET_MQTT_PORT;
+const char* mqtt_user = SECRET_MQTT_USER;
+const char* mqtt_pass = SECRET_MQTT_PASS;
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+/**
+ * @brief Client creation, connection and dinamic topic subscription
+ * 
+ * @param qty Quantity of devices used in the project
+ * @param dev[] Devices strutct that contains all of the info
+* about the devices used in the project
+ */
+static void cosmosMqttReconect(int qty, Devices_t dev[])
+{
+  while (!client.connected())
+  {
+    //Client creation
+    String clientId = "esp_";
+    clientId += String(random(0xffff), HEX);
+    //Coneccting the client
+    if (client.connect(clientId.c_str(), mqtt_user, mqtt_pass))
+    {
+      //Dinamic subscription based on the device types
+    
+      for (int j = 0; j < qty; j++)
+      {
+        char auxTopic[30] ="";
+
+        String topic = topicGeneration(dev[j].sn);
+      	topic.toCharArray(auxTopic, 30);
+   		  if (topic.length() > 14)
+          client.subscribe(auxTopic);
+      }
+    }
+    else
+    {
+      delay(5000);
+    }
+  }
+}
 
 void cosmosBegin(int qty, Devices_t dev[])
 {
@@ -112,4 +161,25 @@ void btnMonitor(int btnArray[], String devArray[], int btnQty, int devQty, Devic
         lightControll(devArray[i], "000/000/000/000/", devQty, dev);  
     }
   }
+}
+
+void cosmosMqttLoop (int qty, Devices_t dev[])
+{
+  if (!client.connected())
+  {
+    cosmosMqttReconect(qty, dev);
+  }
+  client.loop();
+}
+
+void cosmosMqttSetup (void (*myCallback) (char* topic, byte* payload, unsigned int length))
+{
+  //mqtt client setup
+  client.setServer(mqtt_server, mqtt_port);
+  client.setCallback(myCallback);
+}
+
+void cosmosMqttPublish(const char* topic, const char* msg)
+{
+  client.publish(topic, msg);
 }

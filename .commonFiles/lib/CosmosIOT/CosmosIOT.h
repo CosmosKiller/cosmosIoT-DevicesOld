@@ -7,6 +7,14 @@
 
 #include "Arduino.h"
 
+#include "MqttCustomFunc.h"
+
+#define LSC     1
+#define SKT     2
+#define SNR     3
+#define CAM     4
+#define MOT     5
+
 /**
 * Standard structure for devices management
 * DON'T MODIFY THIS STRUCT!
@@ -18,7 +26,7 @@ int state; //Initial state of the device (HIGH/LOW)
 } Devices_t;
 
 /**
-* Use this function within the setup() in order
+* @brief Use this function within the setup() in order
 * to configure pin modes and initial values.
 *
 * @param qty Quantity of devices used in the project
@@ -28,7 +36,7 @@ int state; //Initial state of the device (HIGH/LOW)
 void cosmosBegin(int qty, Devices_t dev[]);
 
 /**
-* This function is used to controll the state (on/off)
+* @brief This function is used to controll the state (on/off)
 * of a certain socket
 *
 * @param snValue Serial number used to compare and 
@@ -40,7 +48,7 @@ void cosmosBegin(int qty, Devices_t dev[]);
 String socketControll(String snValue, int qty, Devices_t dev[]);
 
 /**
-* This function is used to controll color and brightness of
+* @brief This function is used to controll color and brightness of
 * any RGB ligth source
 
 * @param snValue Serial number used to compare and
@@ -54,7 +62,7 @@ String socketControll(String snValue, int qty, Devices_t dev[]);
 String lightControll(String snValue, String rgbValues, int qty, Devices_t dev[]);
 
 /**
-* Call this function whenever you need/want to
+* @brief Call this function whenever you need/want to
 * use buttons to locally control any device.
 * 
 * @param btnArray[] Pins in which the buttons are be connected 
@@ -66,5 +74,32 @@ String lightControll(String snValue, String rgbValues, int qty, Devices_t dev[])
 * about the devices used in the project
 */
 void btnMonitor(int btnArray[], String devArray[], int btnQty, int devQty, Devices_t dev[]);
+
+/**
+ * @brief Client connection and persistance to the server
+ * 
+* @param qty Quantity of devices used in the project
+* @param dev[] Devices strutct that contains all of the info
+* about the devices used in the project
+*/
+void cosmosMqttLoop (int qty, Devices_t dev[]);
+
+/**
+ * @brief Mqtt client setup
+ * 
+ * @param myCallback Function must recive the following params:
+ *  ->char* topic ; 
+ *  ->byte* payload ; 
+ *  ->unsigned int length
+ */
+void cosmosMqttSetup (void (*myCallback) (char* topic, byte* payload, unsigned int length));
+
+/**
+ * @brief Mqtt client publishing
+ * 
+ * @param topic Topic in which the mqtt broker publishes the message
+ * @param msg Message sent by the mqtt broker
+ */
+void cosmosMqttPublish(const char* topic, const char* msg);
 
 #endif /* MAIN_COSMOSIOT_H_ */

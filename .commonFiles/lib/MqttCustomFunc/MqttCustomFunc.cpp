@@ -2,7 +2,7 @@
 
 #include "MqttCustomFunc.h"
 
-String topicGeneration(String serialNumber, int aux)
+String topicGeneration(String serialNumber)
 {
    String topic = "";
    String type = "" ;
@@ -22,6 +22,8 @@ String topicGeneration(String serialNumber, int aux)
       topic = serialNumber + "/Sensors";
    else if (type == "CAM")
       topic = serialNumber + "/Cameras";
+   else if (type == "MOT")
+      topic = serialNumber + "/Motors";
 
    topic.trim();
    return topic;
@@ -48,7 +50,7 @@ void payloadSerialSend(char* topic, byte* payload, unsigned int length)
    Serial.write(toSend);
 }
 
-Payload_t payloadSplit(String incomingPayload)
+Payload_t payloadSerialSplit(String incomingPayload)
 {
    Payload_t splitted;
    int aux = 0;
