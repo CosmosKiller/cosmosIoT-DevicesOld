@@ -1,10 +1,14 @@
 #include <stdio.h>
 
-#include "PubSubClient.h"
 #include "WiFiClient.h"
+#include "ESP8266WiFi.h"
 
 #include "CosmosIOT.h"
 #include "secretSerial.h"
+
+//WiFi credentials
+const char* ssid = SECRET_SSID;
+const char* pass = SECRET_PASS;
 
 //MQTT Credentials
 const char* mqtt_server = SECRET_MQTT_HOST;
@@ -14,6 +18,37 @@ const char* mqtt_pass = SECRET_MQTT_PASS;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+/**
+ * @brief WiFi connection to the AP
+ * 
+ * @param board Choose between CIOT_ESP32 or CIOT_ESP8266
+ */
+static void cosmosWifiSetup(int board)
+{
+  switch (board)
+  {
+  case CIOT_ESP8266:
+    delay(10);
+    //ESP2866 Wifi Connection
+    WiFi.begin(ssid, pass);
+
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      delay(500);
+    }
+    break;
+  
+  case CIOT_ESP32:
+    delay(10);
+    //ESP32 Wifi Connection
+    break;
+
+  default:
+    break;
+  }
+
+}
 
 /**
  * @brief Client creation, connection and dinamic topic subscription
@@ -175,14 +210,17 @@ void cosmosMqttLoop (int qty, Devices_t dev[])
   client.loop();
 }
 
-void cosmosMqttSetup (void (*myCallback) (char* topic, byte* payload, unsigned int length))
+void cosmosMqttSetup(MQTT_CALLBACK_SIGNATURE, int board)
 {
-  //mqtt client setup
+  // wifi setup
+  cosmosWifiSetup(board);
+
+  // mqtt client setup
   client.setServer(mqtt_server, mqtt_port);
-  client.setCallback(myCallback);
+  client.setCallback(callback);
 }
 
-void cosmosMqttPublish(const char* topic, const char* msg)
+void cosmosMqttPublish(const char *topic, const char *msg)
 {
   client.publish(topic, msg);
 }

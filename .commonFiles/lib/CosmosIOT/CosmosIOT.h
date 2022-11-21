@@ -6,14 +6,18 @@
 #define MAIN_COSMOSIOT_H_
 
 #include "Arduino.h"
+#include "PubSubClient.h"
 
 #include "MqttCustomFunc.h"
 
-#define LSC     1
-#define SKT     2
-#define SNR     3
-#define CAM     4
-#define MOT     5
+#define LSC             1
+#define SKT             2
+#define SNR             3
+#define CAM             4
+#define MOT             5
+
+#define CIOT_ESP32      6
+#define CIOT_ESP8266    7
 
 /**
 * Standard structure for devices management
@@ -85,21 +89,22 @@ void btnMonitor(int btnArray[], String devArray[], int btnQty, int devQty, Devic
 void cosmosMqttLoop (int qty, Devices_t dev[]);
 
 /**
- * @brief Mqtt client setup
+ * @brief Mqtt client and wifi setup
  * 
- * @param myCallback Function must recive the following params:
+ * @param callback Function must recive the following params:
  *  ->char* topic ; 
  *  ->byte* payload ; 
  *  ->unsigned int length
+ * @param board Choose between CIOT_ESP32 or CIOT_ESP8266
  */
-void cosmosMqttSetup (void (*myCallback) (char* topic, byte* payload, unsigned int length));
+void cosmosMqttSetup(MQTT_CALLBACK_SIGNATURE, int board);
 
 /**
  * @brief Mqtt client publishing
  * 
  * @param topic Topic in which the mqtt broker publishes the message
- * @param msg Message sent by the mqtt broker
+ * @param msg Message sent to the mqtt broker
  */
-void cosmosMqttPublish(const char* topic, const char* msg);
+void cosmosMqttPublish(const char *topic, const char *msg);
 
 #endif /* MAIN_COSMOSIOT_H_ */

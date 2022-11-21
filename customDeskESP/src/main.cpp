@@ -1,7 +1,4 @@
-#include "ESP8266WiFi.h"
-
 #include "CosmosIOT.h"
-#include "secretSerial.h"
 
 //Defining and initiating our devices
 Devices_t devices []{
@@ -19,16 +16,9 @@ Devices_t devices []{
 
 const int QUANTITY = sizeof(devices)/sizeof(devices[0]);
 
-//WiFi credentials
-const char* ssid = SECRET_SSID;
-const char* pass = SECRET_PASS;
-
 //Variables
 String incomingStr = "";
 Payload_t splitPayload;
-
-//Function declaration
-void setup_wifi();
 
 void setup()
 {
@@ -36,29 +26,13 @@ void setup()
   Serial.setTimeout(15);
   delay(1500);
   randomSeed(micros());
-  setup_wifi();
 
-  cosmosMqttSetup(payloadSerialSend);
+  cosmosMqttSetup(payloadSerialSend, CIOT_ESP8266);
 }
 
 void loop()
 {
   cosmosMqttLoop(QUANTITY, devices);
-}
-
-
-//Functions definition
-void setup_wifi()
-{
-  delay(10);
-  //Wifi Connection
-  WiFi.begin(ssid, pass);
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
 }
 
 void serialEvent()
