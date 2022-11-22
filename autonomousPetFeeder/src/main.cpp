@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "ESP8266_ISR_Servo.h"
+#include "Servo.h"
 
 #include "CosmosIOT.h"
 
@@ -16,8 +16,7 @@ Devices_t devices []{
 const int QUANTITY = sizeof(devices)/sizeof(devices[0]);
 
 //Defining and initiating our the servo
-ESP8266_ISR_Servo servo;
-int8_t srv1_id = servo.setupServo(devices[1].pin[0]);
+Servo servo;
 
 //Function declaration
 static void servoControl(int deg);
@@ -26,15 +25,15 @@ static void myCallback(char *topic, byte *payload, unsigned int length);
 void setup()
 {
   Serial.begin(115200);
-  servo.enable(srv1_id);
+  servo.attach(devices[1].pin[0]);
   pinMode(btn1, INPUT);
   pinMode(btn2, INPUT);
   pinMode(devices[0].pin[0], OUTPUT);
-  servo.setPosition(srv1_id, 180);
+  servo.write(180);
   delay(1000);
-  servo.setPosition(srv1_id, 0);
+  servo.write(0);
   delay(1000);
-  servo.disable(srv1_id);
+  servo.detach();
 
   cosmosMqttSetup(myCallback, CIOT_ESP8266); 
 }
@@ -56,7 +55,6 @@ static void myCallback(char *topic, byte *payload, unsigned int length)
 
   if (category != NULL)
   {
-    Serial.println("New message from Motors");
     servoControl(90);
   }
 
@@ -70,18 +68,16 @@ static void servoControl(int deg)
   String topic = devices[1].sn + "/rx_state";
   topic.toCharArray(auxTopic, 30);
 
-  servo.enable(srv1_id);
+  servo.attach(devices[1].pin[0]);
   delay(100);
-  servo.setPosition(srv1_id, deg);
+  servo.write(deg);
   digitalWrite(devices[0].pin[0],HIGH);
-  cosmosMqttPublish(auxTopic, "Servo activado");
-  Serial.println("Servo Activado");
+  cosmosMqttPublish(auxTopic, "1");
   delay(2000);
-  servo.setPosition(srv1_id, 0);
+  servo.write(0);
   digitalWrite(devices[0].pin[0], LOW);
-  cosmosMqttPublish(auxTopic, "Servo desactivado");
-  Serial.println("Servo Desactivado");
+  cosmosMqttPublish(auxTopic, "0");
   delay(1000);
-  servo.disable(srv1_id);
+  servo.detach();
   delay(100);
 }
