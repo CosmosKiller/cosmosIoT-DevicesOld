@@ -16,9 +16,6 @@
 #define CAM             4
 #define MOT             5
 
-#define CIOT_ESP32      6
-#define CIOT_ESP8266    7
-
 /**
 * Standard structure for devices management
 * DON'T MODIFY THIS STRUCT!
@@ -97,7 +94,7 @@ void cosmosMqttLoop (int qty, Devices_t dev[]);
  *  ->unsigned int length
  * @param board Choose between CIOT_ESP32 or CIOT_ESP8266
  */
-void cosmosMqttSetup(MQTT_CALLBACK_SIGNATURE, int board);
+void cosmosMqttSetup(MQTT_CALLBACK_SIGNATURE);
 
 /**
  * @brief Mqtt client publishing
@@ -106,5 +103,7 @@ void cosmosMqttSetup(MQTT_CALLBACK_SIGNATURE, int board);
  * @param msg Message sent to the mqtt broker
  */
 void cosmosMqttPublish(const char *topic, const char *msg);
+
+void cosmosWifiSetup(void);
 
 #endif /* MAIN_COSMOSIOT_H_ */

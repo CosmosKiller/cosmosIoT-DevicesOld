@@ -4,9 +4,12 @@
 
 #include "CosmosIOT.h"
 
+//Defining and initiating our the servo
+Servo servo;
+
 //Defining btn pins
-const int btn1 = 4;
-const int btn2 = 5;
+const int btn1 = 2;
+const int btn2 = 3;
 
 //Defining and initiating our devices
 Devices_t devices []{
@@ -14,9 +17,6 @@ Devices_t devices []{
   {"MOTSv-aaa0000", {1, 0, 0}, LOW}
 };
 const int QUANTITY = sizeof(devices)/sizeof(devices[0]);
-
-//Defining and initiating our the servo
-Servo servo;
 
 //Function declaration
 static void servoControl(int deg);
@@ -35,7 +35,8 @@ void setup()
   delay(1000);
   servo.detach();
 
-  cosmosMqttSetup(myCallback, CIOT_ESP8266); 
+  cosmosWifiSetup();
+  cosmosMqttSetup(myCallback); 
 }
 
 void loop()
@@ -47,7 +48,7 @@ static void myCallback(char *topic, byte *payload, unsigned int length)
 {
   /*
   * If the topic contains our desire category
-  * the strste() function will return a pointer
+  * the strstr() function will return a pointer
   * to the first occurrence in it, and store it
   * in the 'category' variable
   */

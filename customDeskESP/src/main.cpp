@@ -27,7 +27,7 @@ void setup()
   delay(1500);
   randomSeed(micros());
 
-  cosmosMqttSetup(payloadSerialSend, CIOT_ESP8266);
+  cosmosMqttSetup(payloadSerialSend);
 }
 
 void loop()

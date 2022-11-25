@@ -13,7 +13,7 @@
 * If you want to build/test/upload you code, type `pio run -e [theNameOfTheProjectYouAreWorkingOn]`. For more information, type `pio run -h`
 ### Creating a new project
 * First you'll need to create the project's folder where the *main.cpp* and the *platformio.ini* files will live
-* Be sure to be as explicit and illustrative as possible when naming your project/folder ; e.g.,
+* Be sure to be as explicit and illustrative as possible when naming your project/folder ; e.g., 'automatedIrrigationSystem'
 * Once you've created the project directory, you'll need to create the *platformio.ini* file. This file, is used as project's configuration file that PlatformIO will use to build/upload/test your source code.
 * This file **must** include the following section (denoted by the `[header]` 'platformio')
 ```ini
@@ -30,6 +30,8 @@ include_dir  = ../.commonFiles/include
 platform  = espressif8266
 board  = nodemcuv2
 framework  = arduino
+lib_ldf_mode = chain+
+build_flags = -D CIOT_ESP8266
 monitor_speed  = 115200
 lib_deps  =
 	khoih-prog/ESP8266_ISR_Servo@^1.3.0
