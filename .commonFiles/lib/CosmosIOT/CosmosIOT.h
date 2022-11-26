@@ -16,6 +16,9 @@
 #define CAM             4
 #define MOT             5
 
+#define RX_CONTROL  "/rx_controll"
+#define RX_STATE    "/rx_state"
+
 /**
 * Standard structure for devices management
 * DON'T MODIFY THIS STRUCT!
@@ -99,11 +102,16 @@ void cosmosMqttSetup(MQTT_CALLBACK_SIGNATURE);
 /**
  * @brief Mqtt client publishing
  * 
- * @param topic Topic in which the mqtt broker publishes the message
  * @param msg Message sent to the mqtt broker
+ * @param devSerial Device serial number -> device[i].sn
+ * @param topic Topic in which the mqtt broker publishes the message
  */
-void cosmosMqttPublish(const char *topic, const char *msg);
+void cosmosMqttPublish(const char *msg, String devSerial, const char *topic);
 
+/**
+ * @brief Wifi setup funcion. 
+ * 
+ */
 void cosmosWifiSetup(void);
 
 #endif /* MAIN_COSMOSIOT_H_ */

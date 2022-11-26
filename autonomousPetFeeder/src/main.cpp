@@ -64,21 +64,21 @@ static void myCallback(char *topic, byte *payload, unsigned int length)
 
 static void servoControl(int deg)
 {
-  char auxTopic[30] ="";
-
-  String topic = devices[1].sn + "/rx_state";
-  topic.toCharArray(auxTopic, 30);
-
   servo.attach(devices[1].pin[0]);
   delay(100);
+
   servo.write(deg);
   digitalWrite(devices[0].pin[0],HIGH);
-  cosmosMqttPublish(auxTopic, "1");
+  cosmosMqttPublish("1", devices[1].sn, RX_STATE);
+  cosmosMqttPublish("Sirviendo...", devices[1].sn, RX_CONTROL);
   delay(2000);
+
   servo.write(0);
   digitalWrite(devices[0].pin[0], LOW);
-  cosmosMqttPublish(auxTopic, "0");
-  delay(1000);
+  cosmosMqttPublish("0", devices[1].sn, RX_STATE);
+  cosmosMqttPublish("Cerrado", devices[1].sn, RX_CONTROL);
+  delay(100);
+
   servo.detach();
   delay(100);
 }

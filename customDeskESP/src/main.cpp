@@ -47,10 +47,10 @@ void serialEvent()
     incomingStr = incomingStr + "/";
     splitPayload = payloadSerialSplit(incomingStr);
 
-    auxTopic = splitPayload.sn + '/' + splitPayload.category;
+    auxTopic = '/' + splitPayload.category;
     auxTopic.toCharArray(topic, 50);
     splitPayload.msg.toCharArray(msg, 50);
 
-    cosmosMqttPublish(topic, msg);
+    cosmosMqttPublish(msg, splitPayload.sn, topic);
   }
 }

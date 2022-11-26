@@ -236,7 +236,13 @@ void cosmosMqttSetup(MQTT_CALLBACK_SIGNATURE)
   client.setCallback(callback);
 }
 
-void cosmosMqttPublish(const char *topic, const char *msg)
+void cosmosMqttPublish(const char *msg, String devSerial, const char *topic)
 {
-  client.publish(topic, msg);
+  String s_topic;
+  char auxTopic[40];
+
+  s_topic = devSerial + topic;
+  s_topic.toCharArray(auxTopic, 40);
+
+  client.publish(auxTopic, msg);
 }
