@@ -7,7 +7,9 @@
 
 #include "DHT.h"
 
-#include "CosmosIOT.h"
+#include "CosmosClient.h"
+#include "CosmosSerialCom.h"
+#include "STDCosmosDev.h"
 
 //Defining and initiating our devices
 Devices_t devices []{
@@ -93,7 +95,7 @@ void loop()
   if (now - lastMsg > 2000)
   {
     lastMsg = now;
-    String msg = String(temperature) + "," + String(humudity) + "|" + devices[9].sn + "/rx_controll";
+    String msg = String(temperature) + "," + String(humudity) + "|" + devices[9].sn + RX_CONTROL;
     msg.toCharArray(toSend, 50);
 
     Serial1.write(toSend);

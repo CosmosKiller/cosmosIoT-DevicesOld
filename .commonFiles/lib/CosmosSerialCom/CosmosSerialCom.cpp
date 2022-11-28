@@ -1,33 +1,6 @@
 #include <stdio.h>
 
-#include "MqttCustomFunc.h"
-
-String topicGeneration(String serialNumber)
-{
-   String topic = "";
-   String type = "" ;
-   for (int j = 0 ; j < 14 ; j++) // 14 is the standar lenght of the serial numbers
-   {
-      if (j < 3)
-         type += serialNumber[j];  
-   }
-
-   if (type == "HUB")
-      topic = serialNumber + "/Homehubs";
-   else if (type == "LSC")
-      topic = serialNumber + "/Lights";
-   else if (type == "SKT")
-      topic = serialNumber + "/Sockets";
-   else if (type == "SNR")
-      topic = serialNumber + "/Sensors";
-   else if (type == "CAM")
-      topic = serialNumber + "/Cameras";
-   else if (type == "MOT")
-      topic = serialNumber + "/Motors";
-
-   topic.trim();
-   return topic;
-}
+#include "CosmosSerialCom.h"
 
 String payloadCapture(byte* payload, unsigned int length) 
 {

@@ -1,4 +1,5 @@
-#include "CosmosIOT.h"
+#include "CosmosClient.h"
+#include "CosmosSerialCom.h"
 
 //Defining and initiating our devices
 Devices_t devices []{

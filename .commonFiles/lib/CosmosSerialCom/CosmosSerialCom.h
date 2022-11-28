@@ -1,25 +1,26 @@
-#ifndef MAIN_MQTTCUSTOMFUNC_H_
-#define MAIN_MQTTCUSTOMFUNC_H_
+/**
+* Standard library used to manage all the I/O functionalities, reciving 
+* the commands via the serial pins (TX0/RX0)
+* It can also be used to return information such as temperature, humidity and
+* polution messurements, etc.
+*/ 
+
+#ifndef MAIN_COSMOSSERIALCOM_H_
+#define MAIN_COSMOSSERIALCOM_H_
 
 #include "Arduino.h"
 
-typedef struct MqttCustomFunc
+/**
+ * @brief Standard struct for serial comunication
+ * between cosmosIoT devices
+ * 
+ */
+typedef struct cosmosSerialCom
 {
    String msg;
    String sn;
    String category;
 } Payload_t;
-
-/**
-* This functions returns an String that contains the topic and-sub topic that
-* the device is going to suscribe to.
-*
-* @param serialNumber Use the member sn of the "Devices" struct in order to pass the
-* serial number as a paramter
-* @return Notice that 'topic' is returned as an String, you need to 
-* cast it to a char array
-*/
-String topicGeneration(String serialNumber);
 
 /**
 * This function is meant to be used it within the callback()
@@ -55,4 +56,4 @@ void payloadSerialSend(char* topic, byte* payload, unsigned int length);
 */
 Payload_t payloadSerialSplit(String incomingPayload);
 
-#endif /* MAIN_MQTTCUSTOMFUNC_H_ */
+#endif /* MAIN_COSMOSSERIALCOM_H_ */
