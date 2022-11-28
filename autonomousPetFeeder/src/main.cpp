@@ -2,23 +2,22 @@
 
 #include "Servo.h"
 
-#include "CosmosIOT.h"
+#include "CosmosClient.h"
 
-//Defining and initiating our the servo
+// Defining and initiating our the servo
 Servo servo;
 
-//Defining btn pins
+// Defining btn pins
 const int btn1 = 2;
 const int btn2 = 3;
 
-//Defining and initiating our devices
-Devices_t devices []{
-  {"LSCLw-aaa0000", {0, 0, 0}, LOW},
-  {"MOTSv-aaa0000", {1, 0, 0}, LOW}
-};
-const int QUANTITY = sizeof(devices)/sizeof(devices[0]);
+// Defining and initiating our devices
+Devices_t devices[]{
+    {"LSCLw-aaa0000", {0, 0, 0}, LOW},
+    {"MOTSv-aaa0000", {1, 0, 0}, LOW}};
+const int QUANTITY = sizeof(devices) / sizeof(devices[0]);
 
-//Function declaration
+// Function declaration
 static void servoControl(int deg);
 static void myCallback(char *topic, byte *payload, unsigned int length);
 
@@ -36,7 +35,7 @@ void setup()
   servo.detach();
 
   cosmosWifiSetup();
-  cosmosMqttSetup(myCallback); 
+  cosmosMqttSetup(myCallback);
 }
 
 void loop()
@@ -47,11 +46,11 @@ void loop()
 static void myCallback(char *topic, byte *payload, unsigned int length)
 {
   /*
-  * If the topic contains our desire category
-  * the strstr() function will return a pointer
-  * to the first occurrence in it, and store it
-  * in the 'category' variable
-  */
+   * If the topic contains our desire category
+   * the strstr() function will return a pointer
+   * to the first occurrence in it, and store it
+   * in the 'category' variable
+   */
   char *category = strstr(topic, "Motors");
 
   if (category != NULL)
@@ -64,21 +63,22 @@ static void myCallback(char *topic, byte *payload, unsigned int length)
 
 static void servoControl(int deg)
 {
+  cosmosMqttPublish("1", devices[1].sn, RX_STATE);
+  cosmosMqttPublish("Sirviendo...", devices[1].sn, RX_CONTROL);
+
   servo.attach(devices[1].pin[0]);
   delay(100);
 
   servo.write(deg);
-  digitalWrite(devices[0].pin[0],HIGH);
-  cosmosMqttPublish("1", devices[1].sn, RX_STATE);
-  cosmosMqttPublish("Sirviendo...", devices[1].sn, RX_CONTROL);
+  digitalWrite(devices[0].pin[0], HIGH);
   delay(2000);
-
   servo.write(0);
   digitalWrite(devices[0].pin[0], LOW);
-  cosmosMqttPublish("0", devices[1].sn, RX_STATE);
-  cosmosMqttPublish("Cerrado", devices[1].sn, RX_CONTROL);
   delay(100);
 
   servo.detach();
   delay(100);
+  
+  cosmosMqttPublish("0", devices[1].sn, RX_STATE);
+  cosmosMqttPublish("Cerrado", devices[1].sn, RX_CONTROL);
 }
