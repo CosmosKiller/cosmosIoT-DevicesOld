@@ -19,14 +19,14 @@ snrThrPin_t mySensors[]{
     {25, SNRTH_PIN},
     {30, SNRWL_PIN}};
 
-CosmosPump_t myPump{
-    devices[0],
-    devices[3].pin,
-    mySensors[1],
-    mySensors[0],
-    {0, 0}};
+CosmosPump_t myPump = {
+    .pump = devices[0],
+    .ledPins = devices[3].pin,
+    .snrWl = mySensors[1],
+    .snrTh = mySensors[0]
+};
 
-float sensorData[] = {0, 0, 0, 0};
+snrData_t sensorData = {};
 
 // Global variables
 long lastMsg = 0;
@@ -40,19 +40,19 @@ void codeForTask1(void *parameter)
   for (;;)
   {
     if (devices[0].state == HIGH)
-      pumpControl(myPump, ENGAGE_RN, sensorData);
+      pumpControl(myPump, ENGAGE_RN, &sensorData);
     else
-      pumpControl(myPump, ENGAGE_NO, sensorData);
+      pumpControl(myPump, ENGAGE_NO, &sensorData);
 
     long now = millis();
     if (now - lastMsg > 2000)
     {
       lastMsg = now;
-      msg = String(sensorData[0]);
+      msg = String(sensorData.wlData);
       msg.toCharArray(toSend, 30);
       cosmosMqttPublish(toSend, devices[2].sn, RX_CONTROL);
 
-      msg = String(sensorData[2]) + "," + String(sensorData[3]);
+      msg = String(sensorData.tmData) + "," + String(sensorData.smData);
       msg.toCharArray(toSend, 30);
       cosmosMqttPublish(toSend, devices[1].sn, RX_CONTROL);
     }
@@ -88,7 +88,7 @@ void loop()
 static void myCallback(char *topic, byte *payload, unsigned int length)
 {
   if (devices[0].state == LOW)
-    pumpControl(myPump, ENGAGE_OK, sensorData);
+    pumpControl(myPump, ENGAGE_OK, &sensorData);
   else
   {
     // Reset pump state

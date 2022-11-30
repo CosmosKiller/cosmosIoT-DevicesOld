@@ -48,6 +48,22 @@ typedef struct CosmosPump
 } CosmosPump_t;
 
 /**
+ * @brief Struct in which the sensed data will be stored
+ * Values as indexed as following -> 
+ * 0 = wlData
+ * 1 = smData
+ * 2 = tmData
+ * 3 = hmData
+ */
+typedef struct snrData
+{
+    int wlData;
+    int smData;
+    float tmData;
+    float hmData;
+} snrData_t;
+
+/**
  * @brief Call this function whenever you want to check the
  * status of the pump
  *
@@ -55,13 +71,8 @@ typedef struct CosmosPump
  * @param engage If you want to turn on the pump ENGAGE_OK ;
  * If you want to leave it in idle ENGAGE_NO ;
  * If pump is already running ENGAGE_RN
- * @param sensorData Array in which the sensed data will be stored
- * Values as indexed as following -> 
- * 0 = wlData
- * 1 = smData
- * 2 = tmData
- * 3 = hmData
+ * @param sensorData Struct in which the sensed data will be stored
  */
-void pumpControl(CosmosPump_t pumpID, int engage, float *sensorData);
+void pumpControl(CosmosPump_t pumpID, int engage, snrData_t *sensorData);
 
 #endif /* MAIN_COSMOSPUMPCONTROL_H_ */

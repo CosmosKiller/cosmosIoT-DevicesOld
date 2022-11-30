@@ -14,7 +14,7 @@ static void powerOff(CosmosPump_t pumpID)
         digitalWrite(pumpID.ledPins[i], LOW);
 }
 
-void pumpControl(CosmosPump_t pumpID, int engage, float *sensedData)
+void pumpControl(CosmosPump_t pumpID, int engage, snrData_t *sensedData)
 {
     int wl = 0;
     int sm = 0;
@@ -23,11 +23,12 @@ void pumpControl(CosmosPump_t pumpID, int engage, float *sensedData)
 
 #ifdef SNRWL_PIN
     wl = analogRead(pumpID.snrWl.Pin);
-    map(wl, 0, 4096, 0, 100);
+    map(wl, 0, 4095, 0, 100);
 #endif
 
 #ifdef SNRSM_PIN
     sm = analogRead(pumpID.snrSm.Pin);
+    map(sm, 0, 4095, 0, 100);
 #endif
 
 #ifdef SNRTH_PIN
@@ -105,8 +106,8 @@ void pumpControl(CosmosPump_t pumpID, int engage, float *sensedData)
             break;
         }
     }
-    sensedData[0] = wl;
-    sensedData[1] = sm;
-    sensedData[2] = temp;
-    sensedData[3] = hum;
+    sensedData->wlData = wl;
+    sensedData->smData = sm;
+    sensedData->tmData = temp;
+    sensedData->hmData = hum;
 }
