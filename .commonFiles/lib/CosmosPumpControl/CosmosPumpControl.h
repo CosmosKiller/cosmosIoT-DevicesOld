@@ -36,7 +36,7 @@ typedef struct snrThrPin
 typedef struct CosmosPump
 {
     /* Pump relay serial number, pins and state */
-    Devices_t pump;
+    Devices_t *pump;
     /* Pins in which the pump's LED is connected */
     const int *ledPins;
     /* Water level sensor */
@@ -67,12 +67,12 @@ typedef struct snrData
  * @brief Call this function whenever you want to check the
  * status of the pump
  *
- * @param pumpID Struct that defines the pump
+ * @param pumpID Pointer to the struct that defines the pump
  * @param engage If you want to turn on the pump ENGAGE_OK ;
  * If you want to leave it in idle ENGAGE_NO ;
  * If pump is already running ENGAGE_RN
- * @param sensorData Struct in which the sensed data will be stored
+ * @param sensorData Pointer to the struct in which the sensed data will be stored
  */
-void pumpControl(CosmosPump_t pumpID, int engage, snrData_t *sensorData);
+void pumpControl(CosmosPump_t *pumpID, int engage, snrData_t *sensorData);
 
 #endif /* MAIN_COSMOSPUMPCONTROL_H_ */
