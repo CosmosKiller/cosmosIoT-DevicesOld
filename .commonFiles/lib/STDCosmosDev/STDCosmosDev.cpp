@@ -1,6 +1,6 @@
 #include "STDCosmosDev.h"
 
-const char *socketControll(String snValue, int qty, Devices_t dev[])
+const char *socketControll(String snValue, int qty, Devices_t *dev)
 {
     String devState;
     String msg;
@@ -30,7 +30,7 @@ const char *socketControll(String snValue, int qty, Devices_t dev[])
     return newMsg;
 }
 
-const char *lightControll(String snValue, String rgbValues, int qty, Devices_t dev[])
+const char *lightControll(String snValue, String rgbValues, int qty, Devices_t *dev)
 {
     int j = 0;
     int ledValue[4];
@@ -79,7 +79,7 @@ const char *lightControll(String snValue, String rgbValues, int qty, Devices_t d
     return newMsg;
 }
 
-void btnMonitor(int btnArray[], String devArray[], int btnQty, int devQty, Devices_t dev[])
+void btnMonitor(int *btnArray, int btnQty, Devices_t *dev)
 {
     for (int i = 0; i < btnQty; i++)
     {
@@ -87,12 +87,12 @@ void btnMonitor(int btnArray[], String devArray[], int btnQty, int devQty, Devic
         {
             String devType = "";
             for (int j = 0; j < 3; j++)
-                devType += devArray[i];
+                devType += dev[i].sn;
 
             if (devType == "SKT")
-                socketControll(devArray[i], devQty, dev);
+                socketControll(dev[i].sn, 1, &dev[i]);
             else if (devType == "LSC")
-                lightControll(devArray[i], "000/000/000/000/", devQty, dev);
+                lightControll(dev[i].sn, "000/000/000/000/", 1, &dev[i]);
         }
     }
 }

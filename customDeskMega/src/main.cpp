@@ -101,7 +101,7 @@ void loop()
     Serial1.write(toSend);
   }
 
-  btnMonitor(btnArr, btnToDev, btnArrLen, QUANTITY, devices);
+  btnMonitor(btnArr, btnArrLen, devices);
 
   incomingStr = "";
   splitPayload = {};
