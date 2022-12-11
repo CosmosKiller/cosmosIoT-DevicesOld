@@ -8,7 +8,7 @@
 ### C-style formatting
 * Here, we apply the classic c-style formatting, following the guidelines proposed in the second edition of 'The C Programming Language' and the LLVM style. Which includes, break before braces only when defining functions, alignment of consecutive macros and an indent width of 4 spaces, among others parameters.
 * To guarantee that the formatting style, will be the same as the described before, yo can copy the following line in the **Clang_format_fallback Style** option from the C/C++ extension for VS Code:
- ```json
+ ```js
  { BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Linux, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4, NamespaceIndentation: All, FixNamespaceComments: false, AlignConsecutiveMacros: true }
  ```
 
@@ -96,9 +96,9 @@ typedef struct cosmos_pump_snr_info {
  */
 typedef struct cosmos_pump {
     /* Pump relay serial number, pins and state */
-    cosmos_devices_t *pump;
+    cosmos_devices_t *pPumpInfo;
     /* Pins in which the pump's LED is connected */
-    const int *led_pins;
+    const int *pLedInfo;
     /* Water level sensor */
     cosmos_pump_snr_info_t snr_wl;
     /* Temperature sensor */
