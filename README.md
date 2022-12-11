@@ -2,6 +2,32 @@
 
 > Here you'll find the code for all of the devices manufactured @CosmosIoT 
 
+## Before you start
+* Before you start working on any project, you'll need to be know and apply the conventions regarding code writing style and formatting, to ensure your code is consistent with the codebase of the platform. 
+
+### C-style formatting
+* Here, we apply the classic c-style formatting, following the guidelines proposed in the second edition of 'The C Programming Language' and the LLVM style. Which includes, break before braces only when defining functions, alignment of consecutive macros and an indent width of 4 spaces, among others parameters.
+* To guarantee that the formatting style, will be the same as the described before, yo can copy the following line in the **Clang_format_fallback Style** option from the C/C++ extension for VS Code:
+ ```json
+ {BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Linux, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4, NamespaceIndentation: All, FixNamespaceComments: false, AlignConsecutiveMacros: true}
+ ```
+
+> Press [Ctrl+,] (Linux/Win) or [Command+,] to open VS Code settings and then type *Clang_format_fallback Style* in the browse bar. Then paste the line described above.
+>
+> You should end up with something similar to the picture below.
+
+<img src='https://i.imgur.com/NP5YZ5A.png'>
+
+### Variables, Derived data types and Functions naming
+* As a general rule, when naming variable/DDT/Functions we use lowercase and underscore if the name consists of more than one word. E.g.:
+```C
+int this_is_my_variable;
+```
+* Only when declaring pointer variables, we use camel casing. E.g.:
+```C
+const char *pMyPointer;
+```
+
 ## Getting started
 * First of all, you'll need to install the PlatformIO Core (CLI) :ant:
 * On a terminal you can simply type `pip install platformio` to get the client globally installed
