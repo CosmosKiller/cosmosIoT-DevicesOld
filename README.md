@@ -1,3 +1,7 @@
+# This repository is now deprecated and no longer maintained. Kindly refer to the new repository for all Cosmos IoT devices. #
+
+> [CosmosIoT-Devices](https://github.com/CosmosKiller/cosmosIoT-Devices)
+
 # :zap: :bulb: CosmosIoT Devices :satellite: :electric_plug:
 
 > Here you'll find the code for all of the devices manufactured @CosmosIoT 
